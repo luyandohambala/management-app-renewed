@@ -1,0 +1,128 @@
+﻿<Window x:Class="management_app_renewed.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Title="LoginWindow" Height="500" Width="770" MaxHeight="500" MinHeight="500" MaxWidth="770" MinWidth="770">
+    <Grid>
+        <!-- border below allows for window draggability-->
+        <Border Height="30" Background="White" MouseDown="DragBorder_MouseDown" Width="210"
+            HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="60"/>
+
+        <Grid>
+            <!-- Column definitions, Column 0 and 1 -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".9*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- First Border in Column 0 Definitions -->
+            <Border Background ="White" Grid.Column="0" CornerRadius="0 0 0 20"/>
+
+            <!-- Second Border in Column 0 Definitions -->
+            <Border CornerRadius="0 200 0 20" Grid.Column="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#3AACAD" Offset="0"/>
+                        <GradientStop Color="#3AADA1" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Grid>
+                    <Canvas>
+                        <Polygon Points="0,20 230,140, 0,270" Fill="#4EB1B6"/>
+                        <Polygon Points="100,400 200,370, 180,470" Fill="#4EB1B6"/>
+                        <Ellipse Margin="250 250 0 0" Width="40" Height="40" Fill="#4eb1b6"/>
+                        <Ellipse Margin="50 400 0 0" Width="20" Height="20" Fill="#4eb1b6"/>
+                    </Canvas>
+
+                    <StackPanel>
+                        <TextBlock Name="Sign_Up_Txt" Text="Sign Up" Style="{StaticResource TitleText}" Margin="40 80 40 40"/>
+                        <TextBlock Name="Sign_Up_WrapTxt" Text="Sign up with your name, username and password to get started" Style="{StaticResource NormalText}" Opacity=".8" Margin="10 40"/>
+                        <Button Name="Sign_Upbtn" Content="Sign up" PreviewMouseLeftButtonDown="Sign_Upbtn_PreviewMouseDown" Style="{StaticResource Button Style}" Margin="10"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- First Border in Column 1 Definitions -->
+            <Border Grid.Column="1" CornerRadius="0 20 0 0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#3AACAD" Offset="0"/>
+                        <GradientStop Color="#3AADA1" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Canvas>
+                        <Polygon Points="10,480 0,370, 80,410" Fill="#4EB1B6"/>
+
+                        <Ellipse Margin="60 470 0 0" Width="20" Height="20" Fill="#4eb1b6"/>
+                    </Canvas>
+                </Grid>
+            </Border>
+
+            <!-- Second Border in Column 1 Definitions-->
+            <Border Background=" White" CornerRadius="0 20 0 200" Grid.Column="1">
+                <StackPanel>
+                    <!-- close icon -->
+                    <Label Name="Close_Icon" MouseDown="Close_Icon_MouseDown" Content="&#xf00d;" Style="{StaticResource Close_Icon_Style}"/>
+
+                    <TextBlock Name="Sign_In_Txt" Text="Sign In" Style="{StaticResource TitleText}" Margin="40 23 40 30" Foreground="#3AACAD"/>
+
+                    <!-- User details stack panel -->
+                    <TextBlock Name="Sign_In_WrapTxt" Text="Proceed with your username and password" Style="{StaticResource NormalText}" Margin="10 10 10 15" FontSize="17" Foreground="#3AACAD"/>
+
+
+                    <!-- username textbox configuration -->
+                    <Border Name="username_border" BorderThickness="1" BorderBrush="#3AABad" CornerRadius="10" Margin="70 7">
+                        <Grid Margin="7 7">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="9*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Content="&#xf007;" Style="{StaticResource Icon_Font}"/>
+                            <TextBlock Name="EmailText" MouseDown="EmailText_MouseDown" Text="Username" Style="{StaticResource Placeholder}"/>
+                            <TextBox Name="EmailTxtBox" TextChanged="EmailTxtBox_TextChanged" Style="{StaticResource TextBoxStyle}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Email textbox configuration -->
+                    <Border Name="Email_Border" BorderThickness="1" BorderBrush="#3AABAD" CornerRadius="10" Margin="70 7" Visibility="Collapsed">
+                        <Grid Margin="7 7">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="9*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Name="Lock_Label_S" Content="&#xf0e0;" Style="{StaticResource Icon_Font}"/>
+                            <TextBlock Name="EmailDetailText_S" MouseDown="EmailDetailText_S_MouseDown" Text="Email" Style="{StaticResource Placeholder}"/>
+                            <TextBox Name="EmailDetailTxtBox_S" TextChanged="EmailDetailTxtBox_S_TextChanged" Style="{StaticResource TextBoxStyle}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- password textbox configuration -->
+                    <Border Name="password_border" BorderThickness="1" BorderBrush="#3AABAD" CornerRadius="10" Margin="70 7">
+                        <Grid Margin="7 7">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="9*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Name="Lock_Label" Content="&#xf023;" Style="{StaticResource Icon_Font}"/>
+                            <TextBlock Name="PasswordText" MouseDown="PasswordText_MouseDown" Text="Password" Style="{StaticResource Placeholder}"/>
+                            <PasswordBox Name="PasswordTxtBox" PasswordChanged="PasswordTxtBox_PasswordChanged" Style="{StaticResource PasswordBoxStyle}"/>
+                        </Grid>
+                    </Border>
+
+
+                    <Button Name="Sign_Inbtn" Content="Sign in" PreviewMouseUp="Sign_Inbtn_MouseDown" Style="{StaticResource Login Button Style}" Margin="20"/>
+
+                    <TextBlock Name="Forgot_Label" PreviewMouseLeftButtonDown="Forgot_Label_PreviewMouseDown" Text="Forgot password?" Visibility="Visible" Style="{StaticResource link_Texts}" Margin="2"/>
+                    <TextBlock Name="Timer_Label" Text="{Binding timer_interval}" FontSize="16" Visibility="Hidden" Foreground="#3aabad" Style="{StaticResource NormalText}" Margin="6 0 0 0"/>
+
+                </StackPanel>
+            </Border>
+
+        </Grid>
+    </Grid>
+</Window>
