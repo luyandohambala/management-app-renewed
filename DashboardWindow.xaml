@@ -1,0 +1,150 @@
+﻿<Window x:Class="management_app_renewed.DashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:src="clr-namespace:management_app_renewed" d:DataContext="{d:DesignInstance Type=src:Ticker}"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Title="DashboardWindow" Height="620" Width="1000" MinHeight="620" MinWidth="1000" MaxHeight="620" MaxWidth="1000" Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <src:Ticker x:Key="ticker" />
+    </Window.Resources>
+
+    <Border Background="#eff2f7" CornerRadius="20">
+        <Grid>
+            <!-- home page grid definitions -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="1" Height="13" Background="#eff2f7" MouseDown="Border_MouseDown" Width="510"
+            HorizontalAlignment="Center" VerticalAlignment="Top" Panel.ZIndex="60"/>
+            
+            <!-- navigation grid layout -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <!-- Icon row -->
+                    <RowDefinition Height="100"/>
+
+                    <!-- menu row -->
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10 20 0 0">
+                        <!-- user account label-->
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="&#xf007;" Margin="5 0 0 0"  Style="{StaticResource Icon_Font}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20"/>
+                            <TextBlock Name="Username_Placeholder" Text="{Binding username_string}" Margin="-15 0 0 0" Style="{StaticResource NormalText}" TextWrapping="Wrap" Foreground="#3AABAD" 
+                                       Width="150" HorizontalAlignment="left" VerticalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+                <Border x:Name="Navigation_Row" Height="520" Grid.Row="1" Background="#3AABAD" Opacity="7" CornerRadius="0 35 0 20">
+                    <DockPanel>
+                        <Border Name="Building_Icon" Width="80" Height="80" Padding="3" Background="White" CornerRadius="100" DockPanel.Dock="Top" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10 -30 10 0">
+                            <Label  Content="&#xf1ad;" FontFamily="./#Font Awesome 6 Free Solid" FontSize="65" Background="Transparent" Foreground="#3AABAD" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <!-- menu titles -->
+                        <TextBlock Text="Building Management" FontSize="28" Style="{StaticResource NormalText}" DockPanel.Dock="Top"/>
+                        
+                        <!-- Menu Seperator -->
+                        <Separator Margin="25" DockPanel.Dock="Top" Height=".8" Background="Transparent"/>
+                        
+                        <!-- menu buttons -->
+                        <StackPanel DockPanel.Dock="Top">
+                            <!-- dashboard button -->
+                            <Button Name="Home_Button" PreviewMouseLeftButtonDown="Home_Button_PreviewMouseDown" Style="{StaticResource Menu_Buttons}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Name="Home_Logo" Content="&#xf015;" Style="{StaticResource Menu_Icon_Configuration}"/>
+                                    <TextBlock Name="Home_Text" Text="Dashboard" Margin ="-3 3 10 0" Style="{StaticResource Menu_Text_Configuration}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Room mangement button -->
+                            <Button Name="Room_Button" PreviewMouseLeftButtonDown="Room_Button_PreviewMouseDown" Style="{StaticResource Menu_Buttons}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Name="Room_Logo" Content="&#xe54f;" Style="{StaticResource Menu_Icon_Configuration}"/>
+                                    <TextBlock Name="Room_Text" Text="Room Management" Style="{StaticResource Menu_Text_Configuration}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- student mangement button -->
+                            <Button Name="Student_Button" PreviewMouseLeftButtonDown="Student_Button_PreviewMouseDown" Style="{StaticResource Menu_Buttons}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Name="Student_Logo" Content="&#xf19d;" Style="{StaticResource Menu_Icon_Configuration}"/>
+                                    <TextBlock Name="Student_Text" Text="Occupant Management" Margin ="-6 3 10 0" Style="{StaticResource Menu_Text_Configuration}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- payment mangement button -->
+                            <Button Name="Payment_Button" PreviewMouseLeftButtonDown="Payment_Button_PreviewMouseDown" Style="{StaticResource Menu_Buttons}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Name="Payment_Logo" Content="&#xf555;" Style="{StaticResource Menu_Icon_Configuration}"/>
+                                    <TextBlock Name="Payment_Text" Text="Payment Management" Style="{StaticResource Menu_Text_Configuration}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- user management button -->
+                            <Button Name="User_Button" PreviewMouseLeftButtonDown="User_Button_PreviewMouseDown" Style="{StaticResource Menu_Buttons}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Name="User_Logo" Content="&#xf007;" Style="{StaticResource Menu_Icon_Configuration}"/>
+                                    <TextBlock Name="User_Text" Text="User Management" Style="{StaticResource Menu_Text_Configuration}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- settings mangement button -->
+                            <Button Name="Settings_Button" PreviewMouseLeftButtonDown="Settings_Button_PreviewMouseDown" Style="{StaticResource Menu_Buttons}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Name="Settings_Logo" Content="&#xf013;" Style="{StaticResource Menu_Icon_Configuration}"/>
+                                    <TextBlock Name="Settings_Text" Text="Settings" Style="{StaticResource Menu_Text_Configuration}"/>
+                                </StackPanel>
+                            </Button>
+                            
+                        </StackPanel>
+
+                        <!-- logout button -->
+                        <Button Name="Logout_Button" PreviewMouseLeftButtonDown="Logout_Button_PreviewMouseDown" Style="{StaticResource log_out_style}" DockPanel.Dock="Bottom" Margin="15 0 15 20" VerticalAlignment="Bottom">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Name="logout_icon" Content="&#xf2f5;" Style="{StaticResource Menu_Icon_Configuration}"/>
+                                <TextBlock Text="Logout" Margin ="-3 0 10 0" Style="{StaticResource Menu_Text_Configuration}"/>
+                            </StackPanel>
+                        </Button>
+
+                    </DockPanel>
+                </Border>
+            </Grid>
+
+            <!-- Conent grid layout -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height ="*"/>
+                    <RowDefinition Height ="50"/>
+                </Grid.RowDefinitions>
+
+                <!-- frame grid -->
+                <Grid>
+                    <Frame Name="Display_Window" NavigationUIVisibility="Hidden" Margin="0 10 6 0" FocusVisualStyle="{x:Null}"/>
+                </Grid>
+                
+                <!-- Footer grid -->
+                <Grid Grid.Row="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Copyright 2023 Designed and Developed by Luyando Hambala" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 10 0" TextWrapping="Wrap" FontSize="16" Style="{StaticResource TitleText}" Foreground="#3AABAD"/>
+
+                        <Label Content="&#xf017;" Style="{StaticResource Icon_Font}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="20" Margin="95 0 10 0"/>
+                        <TextBlock Name="Time_Text"  Text="{Binding Source = { StaticResource ticker }, Path = Now, Mode = OneWay, StringFormat='h:mm tt'}" Style="{StaticResource NormalText}" Foreground="#3AABAD" FontSize="20" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+                
+            </Grid>
+
+
+        </Grid>
+    </Border>
+    
+</Window>

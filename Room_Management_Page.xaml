@@ -1,0 +1,187 @@
+﻿<Page x:Class="management_app_renewed.Room_Management_Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:management_app_renewed"
+      mc:Ignorable="d" 
+      d:DesignHeight="620" d:DesignWidth="800"
+      Title="Room_Management_Page">
+
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Page.Resources>
+
+    <Border Background="#eff2f7">
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="10*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Name="Search_Grid" Width="300" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <!--Search icon and textbox -->
+                <TextBlock Margin="20 0" VerticalAlignment="Center" Foreground="#b0b9c6" IsHitTestVisible="False" Panel.ZIndex="1" Text="Search: Room Number, Room Type, Gender...." Visibility="{Binding ElementName=TxtSearch, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"/>
+                <TextBox Name="TxtSearch" TextChanged="TxtSearch_TextChanged" Style="{StaticResource txbox_configuration}"/>
+                <Label Content="&#xf002;" Style="{StaticResource Icon_Font}" VerticalAlignment="Center" Margin="0 0 15 0" HorizontalAlignment="Right"/>
+            </Grid>
+
+            <TextBlock Text="Create or Manage Rooms" Grid.Row="1" Style="{StaticResource TitleText}" Margin="10"  Foreground="#3AABAD" FontSize="33"/>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Button Name="create_rooms_btn" Content="Create Rooms" PreviewMouseLeftButtonDown="create_rooms_btn_PreviewMouseDown" Style="{StaticResource dashboard_menu_button_style}"/>
+
+                <Button Name="view_rooms_btn" Content="{Binding room_numbers, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonDown="view_rooms_btn_PreviewMouseDown" Style="{StaticResource dashboard_menu_button_style}"/>
+            </StackPanel>
+
+            <Grid Grid.Row="2" Background="#3AABAD" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="5"/>
+
+            <Grid Name="Create_Grid" Grid.Row="3" Visibility="Visible">
+                <Border  BorderBrush="#3AABAD" Margin="10 10 10 0"  BorderThickness="1" HorizontalAlignment="Center" CornerRadius="10" VerticalAlignment="Center" Height="340" Width="500">
+                    <Grid Background="Transparent">
+                        <StackPanel Margin="20" VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Horizontal">
+                            <!-- left stack pane;-->
+                            <StackPanel Margin="20">
+                                <!--name of room -->
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Room Number" Style="{StaticResource NormalText}" Foreground="#3AABAD" FontWeight="SemiBold" Margin="0 10 0 -5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    <Border CornerRadius="5" Width="200" Background="White"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBox Name="Room_Textbox" Style="{StaticResource TextBoxStyle}" Width="200"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <!-- room type -->
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Room Type" Style="{StaticResource NormalText}" Foreground="#3AABAD" FontWeight="SemiBold" Margin="0 10 0 -5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    <Border CornerRadius="5" Width="200" Background="White"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <ComboBox Name="Room_Combobox" BorderThickness="0" Background="White" Foreground="#3aabad" Width="200" SelectionChanged="Room_Combobox_SelectionChanged"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <!-- floor -->
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Floor" Style="{StaticResource NormalText}" Foreground="#3AABAD" FontWeight="SemiBold" Margin="0 10 0 -5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    <Border CornerRadius="5" Width="200" Background="White"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <ComboBox Name="Floor_Combobox" BorderThickness="0" Background="White" Foreground="#3aabad" Width="200"/>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+
+
+                            <!-- right stackpanel -->
+                            <StackPanel Margin="20">
+
+                                <!-- Gender allocation -->
+                                <StackPanel Name="Gender_Stack" Orientation="Vertical" Visibility="{Binding Gender_Visibility}">
+                                    <TextBlock Text="Gender" Style="{StaticResource NormalText}" Foreground="#3AABAD" FontWeight="SemiBold" Margin="0 10 0 -3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    <Border CornerRadius="5" Width="200" Background="White"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <ComboBox Name="Gender_Combobox" ItemsSource="{Binding Gender_ComboBox_List}" BorderThickness="0" Background="White" Foreground="#3aabad" Width="200"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <!-- price allocation -->
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Cost" Style="{StaticResource NormalText}" Foreground="#3AABAD" FontWeight="SemiBold" Margin="0 5 0 -3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    <Border CornerRadius="5" Width="200" Background="LightGray"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBlock Name="Cost_TxtBox" Style="{StaticResource NormalText}" Foreground="#3AABAD" FontWeight="SemiBold" Margin="0 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10">
+                            <Button Name="room_submit_btn" Content="Submit" PreviewMouseLeftButtonDown="Room_Submit_btn_PreviewMouseDown" Style="{StaticResource gridEditButton}" FontSize="14"/>
+                            <Button Content="Clear" PreviewMouseLeftButtonDown="Room_Clear_btn_PreviewMouseDown" Style="{StaticResource gridRemoveButton}" FontSize="14" Margin="20 0 0 0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Grid Name="View_Grid" Grid.Row="3" Visibility="Hidden" >
+                <DockPanel>
+                    <Border Background="White" CornerRadius="10" Margin="10" DockPanel.Dock="Top" Height="266">
+                        <DataGrid ItemsSource="{Binding room_Models, UpdateSourceTrigger=PropertyChanged}" Margin="10" x:Name="Rooms_DataGrid" Style="{DynamicResource DataGridStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" >
+                            <DataGrid.Columns>
+
+                                <!-- room number -->
+                                <DataGridTextColumn  Header="Room Number" Binding="{Binding Room_Number}" IsReadOnly="True" Width="auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- room type -->
+                                <DataGridTextColumn Header="Room Type" Binding="{Binding Room_Type}" IsReadOnly="True" CanUserResize="False" Width="140">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- floor number -->
+                                <DataGridTextColumn Header="Floor Number" Binding="{Binding Floor_Number}" IsReadOnly="True" CanUserResize="False" Width="140">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- occupant number -->
+                                <DataGridTextColumn Header="Occupants" Binding="{Binding Occupants}" IsReadOnly="True" CanUserResize="False" Width="auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- Gender Type -->
+                                <DataGridTextColumn x:Name="gender_col" Header="Gender" Binding="{Binding Gender_Type}" IsReadOnly="True" CanUserResize="False" Width="100">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- cost tab -->
+                                <DataGridTextColumn Header="Cost" Binding="{Binding Cost}" IsReadOnly="True" CanUserResize="False" Width="auto">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+
+
+                    <!-- action buttons -->
+                    <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 10">
+                        <Button Name="edit_room_field" PreviewMouseLeftButtonDown="edit_room_field_PreviewMouseDown" Style="{StaticResource gridEditButton}" Content="Edit"/>
+                        <Button Name="remove_room_field" PreviewMouseLeftButtonDown="remove_room_field_PreviewMouseDown" Style="{StaticResource gridRemoveButton}" Margin="20 0 0 0" Content="Delete"/>
+                    </StackPanel>
+
+                    <!-- filter combobox -->
+                    <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 0">
+                        <TextBlock Text="Sort by" FontSize="16" Style="{StaticResource NormalText}" Foreground="#3AABAD" FontWeight="SemiBold" Margin="0 10 0 -5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Border CornerRadius="5" Width="200" Background="White"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <ComboBox Name="filter_Combobox" FontSize="16" SelectionChanged="filter_Combobox_SelectionChanged" ItemsSource="{Binding filter_ComboBox_List}"  BorderThickness="0" Background="White" Foreground="#3aabad" Width="200"/>
+                        </Border>
+                    </StackPanel>
+                </DockPanel>
+            </Grid>
+        </Grid>
+    </Border>
+
+</Page>

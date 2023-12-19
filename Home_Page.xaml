@@ -1,0 +1,29 @@
+﻿<Page x:Class="management_app_renewed.Home_Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d" 
+      d:DesignHeight="620" d:DesignWidth="800"
+      Title="Home_Page">
+
+    <Border Background="#eff2f7">
+        <Grid>
+
+            <StackPanel>
+                <TextBlock Text="Current Building Standings" Style="{StaticResource TitleText}" Margin="0 20 0 0"  Foreground="#3AABAD"/>
+
+                <TextBlock Text="Welcome!" FontSize="30" Style="{StaticResource TitleText}" Margin="0 20 0 0"  Foreground="#3AABAD"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 40 0 0">
+                <Button Name="total_rooms_btn" Content="{Binding total_rooms_property}" Style="{StaticResource dashboard_button_style}"/>
+
+                <Button Name="total_residents_btn" Content="{Binding total_occupants_property}" Style="{StaticResource dashboard_button_style}"/>
+
+                <Button Content="{Binding total_rentals_property}" Style="{StaticResource dashboard_button_style}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+
+</Page>
