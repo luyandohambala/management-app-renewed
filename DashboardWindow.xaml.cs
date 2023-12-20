@@ -3,27 +3,29 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace management_app_renewed
 {
-    public partial class DashboardWindow : Window, INotifyPropertyChanged
+    public partial class DashboardWindow : Window
     {
 
         // used to set navigation icon
         bool IsNavigation = false;
+
         public string username_string { get; set; }
 
         public DashboardWindow()
         {
             
             InitializeComponent();
+            
             DataContext = this;
+            Settings_Management_Page settings_Management_Page = new Settings_Management_Page();
+            Logo_Image.DataContext = settings_Management_Page;
+            settings_Management_Page.load_image();
             
         }
-
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
 
         //logs out current user
         private void Logout_Button_PreviewMouseDown(object sender, MouseButtonEventArgs e)

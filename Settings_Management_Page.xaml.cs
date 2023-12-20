@@ -1,8 +1,15 @@
-﻿using System.Collections.ObjectModel;
+﻿using ByteSizeLib;
+using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace management_app_renewed
 {
@@ -13,9 +20,13 @@ namespace management_app_renewed
         //room allocation property
         public string room_description { get; set; }
 
-        public static ObservableCollection<string> RoomAlloc_ComboBox_List { get; set; }
+        public ObservableCollection<string> RoomAlloc_ComboBox_List { get; set; }
 
         public string Company_Name { get; set; }
+        public byte[]? Company_Logo { get; set; }
+        
+        public BitmapImage? Company_Image { get; set; }
+        
         public int Floor_Number { get; set; }
         public string Room_Allocation { get; set; }
         
@@ -34,6 +45,7 @@ namespace management_app_renewed
             InitializeComponent();
 
             load_data();
+            load_image();
 
             DataContext = this;
 
@@ -72,6 +84,17 @@ namespace management_app_renewed
             HBfour_amount = string.Join("", list_to_filter.Select(filtered => filtered.HBfour_amount)).Trim();
         }
 
+        public void load_image()
+        {
+            var list_to_filter1 = new SQLConnectionsClass().load_image();
+            Company_Logo = list_to_filter1;
+
+            if (Company_Logo != null)
+            {
+                Company_Image = convert_image(null);
+            }
+        }
+
         private bool validation_check(bool active)
         {
             if (active)
@@ -101,7 +124,7 @@ namespace management_app_renewed
         }
 
         
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -147,6 +170,7 @@ namespace management_app_renewed
                 {
                     Settings settings = new Settings(
                         CompanyN_TxtBox.Text,
+                        Company_Logo,
                         Int32.Parse(FloorN_TxtBox.Text),
                         RoomAlloc_Combobox.SelectedValue.ToString(),
                         Convert.ToChar(CurrencyN_TxtBox.Text),
@@ -159,13 +183,14 @@ namespace management_app_renewed
                     SQLConnectionsClass sQLConnectionsClass = new SQLConnectionsClass();
                     if (sQLConnectionsClass.delete_info("delete all", null, null, 0, null))
                     {
-                        MessageBox.Show("Occupant and Room information reset.", "Mangement App");
+                        //MessageBox.Show("Occupant and Room information reset.", "Mangement App");
                     }
                 }
                 else
                 {
                     Settings settings = new Settings(
                         CompanyN_TxtBox.Text,
+                        Company_Logo,
                         Int32.Parse(FloorN_TxtBox.Text),
                         RoomAlloc_Combobox.SelectedValue.ToString(),
                         Convert.ToChar(CurrencyN_TxtBox.Text),
@@ -191,6 +216,7 @@ namespace management_app_renewed
             {
                 Settings settings = new Settings(
                         "Not set",
+                        null,
                         0,
                         "Hotel/Lodge",
                         'K',
@@ -203,6 +229,77 @@ namespace management_app_renewed
                 {
                     MessageBox.Show("Default set.", "Management App");
                 }
+            }
+        }
+
+        private BitmapImage convert_image(string? filename)
+        {
+            if (filename != null)
+            {
+                byte[] bytes;
+                using (FileStream file = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                {
+                    bytes = new byte[file.Length];
+                    file.Read(bytes, 0, (int)file.Length);
+                }
+
+                var image_memory_stream = new MemoryStream(bytes);
+
+                Company_Logo = bytes;
+
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.UriSource = null;
+                bitmapImage.StreamSource = image_memory_stream;
+                bitmapImage.EndInit();
+
+                return bitmapImage;
+            }
+            else
+            {
+                BitmapImage img = new BitmapImage();
+                using (MemoryStream memStream = new MemoryStream(Company_Logo))
+                {
+                    img.BeginInit();
+                    img.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                    img.CacheOption = BitmapCacheOption.OnLoad;
+                    img.StreamSource = memStream;
+                    img.EndInit();
+                }
+                return img;
+            }
+        }
+        
+        private void Select_Logo_btn_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                
+                if (new FileInfo(openFileDialog.FileName).Length > 2000000)
+                {
+                    MessageBox.Show("Selected image size not supported", "Management App");
+                    openFileDialog.ShowDialog();
+                }
+                else
+                {
+                    Company_Image = convert_image(openFileDialog.FileName);
+
+                    OnPropertyChanged("Company_Image");
+                }
+            }
+        }
+
+        private void Clear_Logo_btn_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (MessageBox.Show("Clear logo?", "Management App", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Company_Image = null;
+                Company_Logo = null;
+                OnPropertyChanged("Company_Image");
             }
         }
     }

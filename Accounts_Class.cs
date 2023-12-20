@@ -1,6 +1,7 @@
 ﻿using FluentEmail.Core;
 using FluentEmail.Razor;
 using FluentEmail.Smtp;
+using System.Data.SQLite;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -208,7 +209,7 @@ namespace management_app_renewed
                 StringBuilder template = new StringBuilder();
                 template.AppendLine("Dear @Model.FirstName,");
                 template.AppendLine("<p>We've noticed you're trying to reset your password. As requested we've generated one for you.</p>");
-                template.AppendLine("<p>Here it is <strong>@Model.Password</strong>");
+                template.AppendLine("<p>Here it is <strong>@Model.Password</strong></p>");
                 template.AppendLine("- Management.");
 
                 return template;
@@ -225,7 +226,7 @@ namespace management_app_renewed
             }
             
         }
-        
+
         public bool send_email(string to_send)
         {
             var sender = new SmtpSender(() => new SmtpClient("smtp.gmail.com", 587)
@@ -238,15 +239,20 @@ namespace management_app_renewed
             Email.DefaultSender = sender;
             Email.DefaultRenderer = new RazorRenderer();
             
-            
+            try 
+            { 
                 var email = Email
                 .From("luyandohambala240@gmail.com", Sender)
                 .To(Reciever)
                 .Subject(Subject)
-                .UsingTemplate(stringBuilder("reset password").ToString(), new {FirstName = User, Password = Password_C})
-                //.Body(stringBuilder("mo").ToString())
+                .UsingTemplateFromFile(".\\reset_password_template.cshtml", new { FirstName = User, Password = Password_C })
                 .SendAsync();
-            return true;
+                return true; 
+            }
+            catch(SQLiteException)
+            {
+                return false;
+            }
 
         }
     }

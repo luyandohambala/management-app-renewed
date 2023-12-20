@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace management_app_renewed
 {
-    public partial class User_Management_Page : Page
+    public partial class User_Management_Page : Page, INotifyPropertyChanged
     {
         public User_Management_Page()
         {
@@ -45,8 +45,7 @@ namespace management_app_renewed
         //prepare searched data
         public void search_table(string to_search)
         {
-            SQLConnectionsClass sQLConnectionsClass = new SQLConnectionsClass();
-            user_Models = new ObservableCollection<New_User>(sQLConnectionsClass.load_user_information().Where(
+            user_Models = new ObservableCollection<New_User>(user_Models.Where(
                 filtered => filtered.Username.ToLower().Contains(to_search.ToLower().Trim()) ||
                 filtered.Email.ToLower().Contains(to_search.ToLower().Trim()) ||
                 filtered.Password.Contains(to_search.ToLower().Trim())));

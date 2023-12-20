@@ -20,6 +20,7 @@
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
+            
         </Style>
 
         <!-- login page Button style-->

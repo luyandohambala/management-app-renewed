@@ -138,6 +138,10 @@ namespace management_app_renewed
 
         private async Task<bool> reset_password(string email, string user)
         {
+            Sign_Inbtn.IsEnabled = false;
+            EmailDetailTxtBox_S.IsEnabled = false;
+            Sign_Inbtn.Content = "Sending...";
+
             SQLConnectionsClass sQLConnectionsClass = new SQLConnectionsClass();
 
             var randomizerTextRegex = RandomizerFactory.GetRandomizer(new FieldOptionsTextRegex { Pattern = "^[a-zA-Z]{9}" });
@@ -149,8 +153,6 @@ namespace management_app_renewed
             if (await Task.Run(() => send_mail.send_email(new_password)))
             {
                 sQLConnectionsClass.Get_Existing_Users(new Existing_User(email, new_password), "update");
-                Sign_Inbtn.IsEnabled = false;
-                EmailDetailTxtBox_S.IsEnabled = false;
                 return true;
             }
             else
@@ -248,6 +250,7 @@ namespace management_app_renewed
                 {
                     if (new SQLConnectionsClass().Get_Existing_Users(new Existing_User(email_d, null), "verify") && await reset_password(email_d, email_d))
                     {
+                        Sign_Inbtn.Content = "Sent";
                         MessageBox.Show("Password successfully reset, details forwarded to your email.", "Management App");
                         dt.Start();
                     }
@@ -282,6 +285,7 @@ namespace management_app_renewed
             else if (increment_timer == 0)
             {
                 Sign_Inbtn.IsEnabled = true;
+                Sign_Inbtn.Content = "Request";
                 EmailDetailTxtBox_S.IsEnabled = true;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("timer_interval"));
                 dt.Stop();

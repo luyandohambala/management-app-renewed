@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Windows.Media.Imaging;
 
 namespace management_app_renewed
 {
     internal class Settings: ConfigurationSection
     {
         public string Company_Name { get; set; }
+        public byte[]? Company_Logo { get; set; }
         
         public int Floor_Number { get; set; }
 
@@ -22,9 +24,10 @@ namespace management_app_renewed
         
         public string HBfour_amount { get; set; }
 
-        public Settings(string c_n, int f_n, string rm, char c, string hts, string htd, string hbf)
+        public Settings(string c_n, byte[]? c_l, int f_n, string rm, char c, string hts, string htd, string hbf)
         {
             Company_Name = c_n;
+            Company_Logo = c_l;
             Floor_Number = f_n;
             Room_Allocation = rm;
             Currency = c;
@@ -49,7 +52,7 @@ namespace management_app_renewed
             return false;
         }
 
-        public List<Settings> load_settings()
+        public List<Settings>? load_settings()
         {
             SQLConnectionsClass sQLConnectionsClass = new SQLConnectionsClass();
             if (sQLConnectionsClass.load_settings() != null)

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Windows;
@@ -10,13 +11,16 @@ namespace management_app_renewed
     internal class SQLConnectionsClass
     {
         //load sqlite databse connection
-        public string Connect(string id = "Default")
+        public string Connect(string id = "connection")
         {
-            /*var builder = new ConfigurationBuilder();
-            
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
             IConfigurationRoot configuration = builder.Build();
-            return configuration.GetConnectionString("Default");*/
-            return System.Configuration.ConfigurationManager.ConnectionStrings[id].ConnectionString;
+
+            return configuration.GetConnectionString(id);
+
         }
 
 
@@ -35,7 +39,7 @@ namespace management_app_renewed
                         command.ExecuteNonQuery();
                         db.Close();
                         return true;
-                    }   
+                    }
                 }
                 else if (table_name == "students")
                 {
@@ -81,7 +85,7 @@ namespace management_app_renewed
                         return true;
                     }
                 }
-                else if(table_name == "delete all")
+                else if (table_name == "delete all")
                 {
                     db.Execute("Delete From Residents");
                     db.Execute("Delete From Rooms");
@@ -103,7 +107,7 @@ namespace management_app_renewed
                     return true;
                 }
                 return false;
-                
+
             }
         }
 
@@ -171,7 +175,7 @@ namespace management_app_renewed
             }
 
         }
-        
+
         public List<Student_Allocator> Load_Occupant_Information()
         {
             using (var db = new SQLiteConnection(Connect()))
@@ -194,44 +198,44 @@ namespace management_app_renewed
         //save informtion to database
         public bool Register_Information(string to_do, object user_details)
         {
-            
-                using (IDbConnection db = new SQLiteConnection(Connect()))
+
+            using (IDbConnection db = new SQLiteConnection(Connect()))
+            {
+                try
                 {
-                    try
+                    if (to_do == "user")
                     {
-                        if (to_do == "user")
-                        {
-                            db.Execute("insert into Users values (@Username, @Email, @Password)", user_details);
+                        db.Execute("insert into Users values (@Username, @Email, @Password)", user_details);
 
-                            return true;
-                        }
-                        else if (to_do == "student")
-                        {
-                            db.Execute("insert into Residents values (@First_Name, @Last_Name, @Gender, @Room_Number)", user_details);
-
-                            return true;
-                        }
-                        return false;
-
+                        return true;
                     }
-                    catch (SQLiteException exception)
+                    else if (to_do == "student")
                     {
-                        if (exception.Message.Contains("constraint failed"))
-                        {
-                            MessageBox.Show("Username already in use.", "Management Application");
-                            return false;
-                        }
-                        else
-                        {
-                            MessageBox.Show($"Error code: {exception.Message}.", "Management Application");
-                            return false;
-                        }
+                        db.Execute("insert into Residents values (@First_Name, @Last_Name, @Gender, @Room_Number)", user_details);
+
+                        return true;
+                    }
+                    return false;
+
+                }
+                catch (SQLiteException exception)
+                {
+                    if (exception.Message.Contains("constraint failed"))
+                    {
+                        MessageBox.Show("Username already in use.", "Management Application");
+                        return false;
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Error code: {exception.Message}.", "Management Application");
+                        return false;
                     }
                 }
-            
+            }
+
         }
 
-        
+
         //adds or edits room in application databse
         public bool Register_Room_Information(string to_do, Room_Allocator room_Allocator)
         {
@@ -252,7 +256,7 @@ namespace management_app_renewed
                                                     Floor_Number = @Floor_Number,
                                                     Gender_Type = @Gender_Type
                                WHERE Room_Number = @Room_Number", room_Allocator);
-                        
+
                         return true;
                     }
                     return false;
@@ -278,7 +282,7 @@ namespace management_app_renewed
                                                 Gender_Type = @Gender_Type, 
                                                 Room_Number = @Room_Number
                             WHERE (First_Name = @First_Name AND Last_Name = @Last_Name)", student_Allocator);
-                        
+
                     return true;
                 }
             }
@@ -350,11 +354,12 @@ namespace management_app_renewed
         //configure user settings
         public bool register_settings(Settings settings)
         {
-            
+
             using (IDbConnection db = new SQLiteConnection(Connect()))
             {
 
                 db.Execute(@"UPDATE Settings SET Company_Name = @Company_Name,
+                                    Company_Logo = @Company_Logo,
                                     Floor_Number = @Floor_Number,
                                     Room_Allocation = @Room_Allocation,
                                     Currency = @Currency,
@@ -364,7 +369,7 @@ namespace management_app_renewed
                             ", settings);
                 return true;
             }
-            
+
         }
 
         public List<Settings> load_settings()
@@ -374,6 +379,33 @@ namespace management_app_renewed
                 var result = db.Query<Settings>("Select * From Settings");
                 return result.ToList();
             }
+        }
+
+        public byte[]? load_image()
+        {
+            using (IDbConnection db = new SQLiteConnection(Connect()))
+            {
+                db.Open();
+                using (var command = db.CreateCommand())
+                {
+                    command.CommandText = "SELECT Company_Logo FROM Settings";
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader["Company_Logo"] != null && !Convert.IsDBNull(reader["Company_Logo"]))
+                            {
+                                return (byte[])reader["Company_Logo"];
+                            }
+                        }
+                    }
+                }
+                db.Close();
+
+            }
+
+            return null;
         }
     }
 }

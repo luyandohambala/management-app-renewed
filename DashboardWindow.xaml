@@ -45,8 +45,8 @@
 
                 <Border x:Name="Navigation_Row" Height="520" Grid.Row="1" Background="#3AABAD" Opacity="7" CornerRadius="0 35 0 20">
                     <DockPanel>
-                        <Border Name="Building_Icon" Width="80" Height="80" Padding="3" Background="White" CornerRadius="100" DockPanel.Dock="Top" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10 -30 10 0">
-                            <Label  Content="&#xf1ad;" FontFamily="./#Font Awesome 6 Free Solid" FontSize="65" Background="Transparent" Foreground="#3AABAD" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Name="Building_Icon" Width="80" Height="80" Padding="3" Background="White" CornerRadius="0" DockPanel.Dock="Top" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10 -30 10 0">
+                            <Image Name="Logo_Image" Source="{Binding Company_Image}" Stretch="Fill" Height="75" Width="75"/>
                         </Border>
                         
                         <!-- menu titles -->
